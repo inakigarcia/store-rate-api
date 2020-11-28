@@ -24,3 +24,11 @@ Now type the following url
     http://localhost:8080/
     
 It should appear a message like "Whitelabel Error Page"
+
+## Browse the database
+
+When active you can browse database from your web browser with this URL
+
+    localhost:8080/h2-console
+    
+Use connection data provided in application.properties file
