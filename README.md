@@ -32,11 +32,11 @@ Requirements:
 
 Build the image with the following command
 
-    docker build -t store-rate-api:1.0.0 .
+    docker build -t store-rate-api:1.0.1 .
     
 Now run with the following command
 
-    docker run -p 8080:8080 --rm store-rate-api:1.0.0
+    docker run -p 8080:8080 --rm store-rate-api:1.0.1
     
 Try it with the following URL
 
