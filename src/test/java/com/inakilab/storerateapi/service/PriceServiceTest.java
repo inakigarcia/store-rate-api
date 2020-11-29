@@ -16,10 +16,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @Service
@@ -64,57 +62,61 @@ public class PriceServiceTest {
     }
 
     @Test
-    public void it_should_call_repository_with_once_given_parameters() {
+    public void it_should_call_repository_with_once_given_parameters() throws Exception {
+        doReturn(Collections.singletonList(price1)).when(priceRepository).findPriceListByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
+
         priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
         verify(priceRepository, times(1)).findPriceListByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
     }
 
-    @Test
+    @Test()
     public void it_should_return_empty_when_no_Price_found() {
         doReturn(Arrays.asList()).when(priceRepository).findPriceListByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        Optional<PriceDto> res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
+        Exception exception = assertThrows(
+                Exception.class,
+                () -> priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE)
+        );
 
-        assertTrue(res.isEmpty());
     }
 
     @Test
-    public void it_should_return_a_PriceDto_if_some_price_found() {
+    public void it_should_return_a_PriceDto_if_some_price_found() throws Exception  {
         doReturn(Collections.singletonList(price1)).when(priceRepository).findPriceListByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        Optional<PriceDto> res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
+        PriceDto res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        assertTrue(res.isPresent());
+        assertNotNull(res);
     }
 
     @Test
-    public void it_should_return_a_PriceDto_for_the_only_found_price() {
+    public void it_should_return_a_PriceDto_for_the_only_found_price() throws Exception  {
         doReturn(Collections.singletonList(price1)).when(priceRepository).findPriceListByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        Optional<PriceDto> res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
+        PriceDto res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        assertEquals(res.get().getBrandId(), price1.getBrandId());
-        assertEquals(res.get().getPriceList(), price1.getPriceList());
-        assertEquals(res.get().getProductId(), price1.getProductId());
-        assertEquals(res.get().getCurrency(), price1.getCurrency());
-        assertEquals(res.get().getEndDate(), price1.getEndDate());
-        assertEquals(res.get().getStartDate(), price1.getStartDate());
-        assertEquals(res.get().getValue(), price1.getValue());
+        assertEquals(res.getBrandId(), price1.getBrandId());
+        assertEquals(res.getPriceList(), price1.getPriceList());
+        assertEquals(res.getProductId(), price1.getProductId());
+        assertEquals(res.getCurrency(), price1.getCurrency());
+        assertEquals(res.getEndDate(), price1.getEndDate());
+        assertEquals(res.getStartDate(), price1.getStartDate());
+        assertEquals(res.getValue(), price1.getValue());
     }
 
     @Test
-    public void it_should_return_a_PriceDto_for_the_first_found_price() {
+    public void it_should_return_a_PriceDto_for_the_first_found_price() throws Exception  {
         doReturn(Arrays.asList(price1, price2)).when(priceRepository).findPriceListByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        Optional<PriceDto> res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
+        PriceDto res = priceService.getPriceByPriority(GIVEN_ID, GIVEN_PRODUCT_ID, GIVEN_DATE);
 
-        assertEquals(res.get().getBrandId(), price1.getBrandId());
-        assertEquals(res.get().getPriceList(), price1.getPriceList());
-        assertEquals(res.get().getProductId(), price1.getProductId());
-        assertEquals(res.get().getCurrency(), price1.getCurrency());
-        assertEquals(res.get().getEndDate(), price1.getEndDate());
-        assertEquals(res.get().getStartDate(), price1.getStartDate());
-        assertEquals(res.get().getValue(), price1.getValue());
+        assertEquals(res.getBrandId(), price1.getBrandId());
+        assertEquals(res.getPriceList(), price1.getPriceList());
+        assertEquals(res.getProductId(), price1.getProductId());
+        assertEquals(res.getCurrency(), price1.getCurrency());
+        assertEquals(res.getEndDate(), price1.getEndDate());
+        assertEquals(res.getStartDate(), price1.getStartDate());
+        assertEquals(res.getValue(), price1.getValue());
     }
 }
