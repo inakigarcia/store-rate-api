@@ -1,12 +1,12 @@
 package com.inakilab.storerateapi.service;
 
 import com.inakilab.storerateapi.dto.PriceDto;
+import com.inakilab.storerateapi.exception.PriceNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public interface PriceService {
 
-    Optional<PriceDto> getPriceByPriority(Long brandId, Long productId, LocalDateTime givenDate);
+    PriceDto getPriceByPriority(Long brandId, Long productId, LocalDateTime givenDate) throws PriceNotFoundException;
 
 }
